@@ -1,10 +1,12 @@
 package com.example.khaled.Note.interfaces;
 
+import android.view.View;
+
 /**
  * Created by khaled on 28/10/2017.
  */
 
-public class InterfaceOnLongClick {
+public interface InterfaceOnLongClick {
 
-    public void onLongClickInterface(){}
+    void onLongClickInterface(View view, int position);
 }

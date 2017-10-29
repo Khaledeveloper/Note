@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.khaled.Note.activities.ViewPagerActivity;
+import com.example.khaled.Note.interfaces.InterfaceOnLongClick;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
@@ -39,7 +40,7 @@ import java.util.TimeZone;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeListFragment extends Fragment {
+public class CrimeListFragment extends Fragment implements InterfaceOnLongClick {
     CrimeAdapter mAdapter;
     Toolbar mToolbar;
     FloatingActionButton mFAB;
@@ -49,9 +50,12 @@ public class CrimeListFragment extends Fragment {
     ArrayList<Crime> SelectedItems = new ArrayList<>();
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+      //  mAdapter = new CrimeAdapter();
+
+       // mAdapter.setOnlongClick(this);
 
     }
 
@@ -121,7 +125,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
         if (mAdapter == null) {
-            mAdapter = new CrimeAdapter(crimes/*,getActivity()*/);
+            mAdapter = new CrimeAdapter(crimes,this);
             mRecyclerView.setAdapter(mAdapter);
         }else {
             mAdapter.setCrimes(crimes);
@@ -133,36 +137,75 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
     }
 
-    public class Crimeholder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-private TextView mTitleCrime , mDateCrime;
-        private TextView mContentNote;
-        public CheckBox mCheckBoxList,checkdelete;
-        private Crime mCrime;
-        CardView mCardView;
+    @Override
+    public void onLongClickInterface(View view, int position) {
 
-        public Crimeholder(View itemView/*, CrimeListActivity crimeListActivity*/) {
-            super(itemView);
+        Toast.makeText(getActivity(), "Interface done!", Toast.LENGTH_SHORT).show();
 
-
-
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-
-          //  itemView.setOnLongClickListener(this);
-
-          //  checkdelete.setVisibility(View.GONE);
+    }
 
 
 
 
-            mTitleCrime =(TextView) itemView.findViewById(R.id.CrimeTitle_listID);
-            mDateCrime =(TextView)itemView.findViewById(R.id.CrimeDate_listID);
-            mCheckBoxList =(CheckBox)itemView.findViewById(R.id.CheckBox_list_ctimeID);
-            mContentNote=(TextView) itemView.findViewById(R.id.NoteContentRowID);
-            checkdelete=(CheckBox)itemView.findViewById(R.id.checkTodeleteID);
-            mCardView=(CardView)itemView.findViewById(R.id.cardviewRow);
 
-         //   mCardView.setOnLongClickListener(this);
+    //***********************************************************************
+
+    //************************************************************************
+
+
+
+    public class CrimeAdapter extends RecyclerView.Adapter<CrimeAdapter.Crimeholder>{
+        private List<Crime> mCrimes;
+        Context mContext;
+        InterfaceOnLongClick mInterfaceOnLongClick;
+       // CrimeListActivity mCrimeListActivity;
+     //   CrimeListFragment mCrimeListFragment;
+
+
+        public CrimeAdapter(List<Crime> crimes,InterfaceOnLongClick interfaceOnlong) {
+           // this.mContext = ctx;
+            mCrimes = crimes;
+            this.mInterfaceOnLongClick = interfaceOnlong;
+
+        //   this.mCrimeListActivity =(CrimeListActivity) mContext;
+
+        }
+
+
+        public void setOnlongClick(InterfaceOnLongClick interfaceOnLongClick){
+            mInterfaceOnLongClick =interfaceOnLongClick;
+        }
+
+        public class Crimeholder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+            private TextView mTitleCrime , mDateCrime;
+            private TextView mContentNote;
+            public CheckBox mCheckBoxList,checkdelete;
+            private Crime mCrime;
+            CardView mCardView;
+
+            public Crimeholder(View itemView/*, CrimeListActivity crimeListActivity*/) {
+                super(itemView);
+
+
+
+                itemView.setOnClickListener(this);
+                itemView.setOnLongClickListener(this);
+
+                //  itemView.setOnLongClickListener(this);
+
+                //  checkdelete.setVisibility(View.GONE);
+
+
+
+
+                mTitleCrime =(TextView) itemView.findViewById(R.id.CrimeTitle_listID);
+                mDateCrime =(TextView)itemView.findViewById(R.id.CrimeDate_listID);
+                mCheckBoxList =(CheckBox)itemView.findViewById(R.id.CheckBox_list_ctimeID);
+                mContentNote=(TextView) itemView.findViewById(R.id.NoteContentRowID);
+                checkdelete=(CheckBox)itemView.findViewById(R.id.checkTodeleteID);
+                mCardView=(CardView)itemView.findViewById(R.id.cardviewRow);
+
+                //   mCardView.setOnLongClickListener(this);
 
 
 
@@ -185,74 +228,65 @@ private TextView mTitleCrime , mDateCrime;
 
 
 
-        }
+            }
 
 
 
 
-        public void Bindcrime(Crime crime){
-            mCrime = crime;
+            public void Bindcrime(Crime crime){
+                mCrime = crime;
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            df.setTimeZone(TimeZone.getDefault());
-           String date = df.format(mCrime.getDate());
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                df.setTimeZone(TimeZone.getDefault());
+                String date = df.format(mCrime.getDate());
 
-            mTitleCrime.setText(mCrime.getTitle());
-            mDateCrime.setText(date);
-            mCheckBoxList.setChecked(mCrime.isSolved());
-            mContentNote.setText(mCrime.getContent());
+                mTitleCrime.setText(mCrime.getTitle());
+                mDateCrime.setText(date);
+                mCheckBoxList.setChecked(mCrime.isSolved());
+                mContentNote.setText(mCrime.getContent());
 
-        }
-
-
-
-
-
+            }
 
 
 
 
 
 
-        @Override
-        public void onClick(View v) {
-            Crime crime = new Crime();
-            //UUID CrimeID = crime.getId();
-         //changing the intent from Mainactivity to ViewPager
-          //  Intent intent = MainActivity.newIntent(getActivity(),mCrime.getId());
-            Intent intent = ViewPagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(intent);
+
+
+
+
+
+            @Override
+            public void onClick(View v) {
+                Crime crime = new Crime();
+                //UUID CrimeID = crime.getId();
+                //changing the intent from Mainactivity to ViewPager
+                //  Intent intent = MainActivity.newIntent(getActivity(),mCrime.getId());
+                Intent intent = ViewPagerActivity.newIntent(getActivity(), mCrime.getId());
+                startActivity(intent);
 
            /* Intent intent = new Intent(getActivity(),MainActivity.class);
             startActivity(intent);*/
 
-        }
+            }
 
 
 
 
 
 
-        @Override
-        public boolean onLongClick(View v) {
-           // CrimeListFragment.isSelected = true;
-            Toast.makeText(itemView.getContext(), "hi", Toast.LENGTH_SHORT).show();
+            @Override
+            public boolean onLongClick(View v) {
+                if (mInterfaceOnLongClick!=null) {
 
-            return true;
-        }
-    }
+                    mInterfaceOnLongClick.onLongClickInterface(itemView, getAdapterPosition());
+                }
+                // CrimeListFragment.isSelected = true;
+             //   Toast.makeText(itemView.getContext(), "hi", Toast.LENGTH_SHORT).show();
 
-
-    public class CrimeAdapter extends RecyclerView.Adapter<Crimeholder>{
-        private List<Crime> mCrimes;
-        Context mContext;
-       // CrimeListActivity mCrimeListActivity;
-     //   CrimeListFragment mCrimeListFragment;
-        public CrimeAdapter(List<Crime> crimes/* Context ctx*/) {
-           // this.mContext = ctx;
-            mCrimes = crimes;
-        //   this.mCrimeListActivity =(CrimeListActivity) mContext;
-
+                return true;
+            }
         }
 
         @Override
