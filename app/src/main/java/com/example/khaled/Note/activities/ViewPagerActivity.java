@@ -8,12 +8,16 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.khaled.Note.CrimeFragment;
 
 import com.example.khaled.Note.R;
+import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
@@ -22,7 +26,9 @@ import java.util.UUID;
 
 public class ViewPagerActivity extends AppCompatActivity {
     ViewPager mViewPager;
+    static InterfaceOnSelectOptionMenuPager mInterfaceOnSelectOption;
     private List<Crime> mCrime;
+    Toolbar mToolbar;
 private static final String CRIMID_KEY ="com.example.khaled.crime.crimeIDViewPager";
 
     public static Intent newIntent(Context context, UUID crimeid){
@@ -38,6 +44,12 @@ private static final String CRIMID_KEY ="com.example.khaled.crime.crimeIDViewPag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
+        mToolbar=(Toolbar)findViewById(R.id.ToolbarnorecontentID);
+        setSupportActionBar(mToolbar);
+
+
+
+
         mViewPager=(ViewPager)findViewById(R.id.ViewPagerID);
         UUID crimeID =(UUID) getIntent().getSerializableExtra(CRIMID_KEY);
 
@@ -73,7 +85,18 @@ private static final String CRIMID_KEY ="com.example.khaled.crime.crimeIDViewPag
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_note_content, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public static void setoptionmenu(InterfaceOnSelectOptionMenuPager interfaceOnSelectOption){
+       mInterfaceOnSelectOption = interfaceOnSelectOption;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mInterfaceOnSelectOption.onSelectOptionMenu(item ,this);
         switch (item.getItemId()){
             case android.R.id.home:
 

@@ -21,5 +21,7 @@
     <string name="ok">ok</string>
     <string name="setting_navi">settings</string>
     <string name="about_navi">about</string>
+    <string name="choose_contact">Choose contact</string>
+    <string name="share">share</string>
 
 </resources>

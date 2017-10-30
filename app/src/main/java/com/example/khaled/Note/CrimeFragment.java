@@ -6,16 +6,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.khaled.Note.activities.ViewPagerActivity;
+import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
@@ -29,9 +37,10 @@ import java.util.UUID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeFragment extends Fragment {
+public class CrimeFragment extends Fragment implements InterfaceOnSelectOptionMenuPager {
 
 EditText mEditText, mContentText;
+    private Toolbar mToolbar;
     Button mDateButtn;
     CheckBox mCheckBox;
     private Crime mCrime;
@@ -56,6 +65,8 @@ EditText mEditText, mContentText;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ViewPagerActivity.setoptionmenu(this);
+
 
         /*
 
@@ -95,6 +106,16 @@ EditText mEditText, mContentText;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
+
+
+
+
+
+
+
+
+
+
         mCheckBox=(CheckBox)v.findViewById(R.id.crime_solvedCheckID);
        // mCheckBox.setChecked(mCrime.isSolved());
         mDateButtn=(Button)v.findViewById(R.id.crime_dateBtnID);
@@ -169,6 +190,8 @@ EditText mEditText, mContentText;
         return v;
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode!= Activity.RESULT_OK){
@@ -193,5 +216,17 @@ EditText mEditText, mContentText;
        // mDateButtn.setText(mCrime.getDate().toString());
 
         mDateButtn.setText(date);
+    }
+
+
+    @Override
+    public void onSelectOptionMenu(MenuItem item, ViewPagerActivity viewPagerActivity) {
+
+            int id = item.getItemId();
+            if (id== R.id.sharenotefragmentID)
+                Toast.makeText(getActivity(), "share", Toast.LENGTH_SHORT).show();
+
+
+
     }
 }
