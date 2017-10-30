@@ -13,6 +13,7 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
     private String mContent;
+    private String contactnumber;
 
     public Crime(){
         mId = UUID.randomUUID();
@@ -22,6 +23,14 @@ public class Crime {
     public Crime(UUID uuid){
         mId = uuid;
         mDate = new Date();
+    }
+
+    public String getContactnumber() {
+        return contactnumber;
+    }
+
+    public void setContactnumber(String contactnumber) {
+        this.contactnumber = contactnumber;
     }
 
     public String getContent() {

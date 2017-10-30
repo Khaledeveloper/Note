@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,11 +39,11 @@ import java.util.UUID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeFragment extends Fragment implements InterfaceOnSelectOptionMenuPager {
+public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionMenuPager*/ {
 
 EditText mEditText, mContentText;
-    private Toolbar mToolbar;
-    Button mDateButtn;
+    public Toolbar mToolbar;
+    Button mDateButtn ,ChooseContactbtn;
     CheckBox mCheckBox;
     private Crime mCrime;
     private static final int REQUEST_DATE = 0;
@@ -60,12 +62,15 @@ EditText mEditText, mContentText;
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewPagerActivity.setoptionmenu(this);
+       // ViewPagerActivity.setoptionmenu(this);
+
+        Log.d(ViewPagerActivity.TAG,"OnCreateFragment.........");
 
 
         /*
@@ -93,12 +98,34 @@ EditText mEditText, mContentText;
         mCrime = CrimeLab.get(getActivity()).getCrime(CrimeID);
     }
 
+
+
 //add for database
     @Override
     public void onPause() {
         super.onPause();
 
+        Log.d(ViewPagerActivity.TAG,"onPaused Fragment");
+
         CrimeLab.get(getActivity()).updateCrime(mCrime);
+    }
+
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        Log.d(ViewPagerActivity.TAG,"OnAttach.....");
+    }
+
+    @Override
+    public void onStart() {
+        Log.d(ViewPagerActivity.TAG,"onStart...........");
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        Log.d(ViewPagerActivity.TAG,"onStoop............");
+        super.onStop();
     }
 
     @Override
@@ -106,8 +133,21 @@ EditText mEditText, mContentText;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
+        setHasOptionsMenu(true);
+        Log.d(ViewPagerActivity.TAG,"onCreateView....");
 
+  mToolbar =(Toolbar)v.findViewById(R.id.ToolbarnorecontentID);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
+        mToolbar.setTitle("Khaled");
+        mToolbar.inflateMenu(R.menu.menu_note_content);
 
+        ChooseContactbtn=(Button)v.findViewById(R.id.choosecontactbtnID);
+        ChooseContactbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
 
 
@@ -219,7 +259,7 @@ EditText mEditText, mContentText;
     }
 
 
-    @Override
+   /* @Override
     public void onSelectOptionMenu(MenuItem item, ViewPagerActivity viewPagerActivity) {
 
             int id = item.getItemId();
@@ -228,5 +268,34 @@ EditText mEditText, mContentText;
 
 
 
+    }*/
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_note_content, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id== R.id.sharenotefragmentID){
+            Toast.makeText(getActivity(), "viewpager", Toast.LENGTH_SHORT).show();
+            Log.d(ViewPagerActivity.TAG,"share pressed");
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+ private String getNoteContent(){
+     String checksolved = null;
+     if (mCrime.isSolved()){
+         checksolved= getString(R.string.crime_report_solved);
+     }else{
+         checksolved=getString(R.string.crime_report_unsolved);
+     }
+ }
 }

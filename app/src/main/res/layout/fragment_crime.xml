@@ -7,6 +7,14 @@
               android:orientation="vertical"
              tools:context="com.example.khaled.Note.CrimeFragment"
     >
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ToolbarnorecontentID"
+        android:background="@color/colorPrimary"
+        >
+
+    </android.support.v7.widget.Toolbar>
 
 
 
