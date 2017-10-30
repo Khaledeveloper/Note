@@ -297,5 +297,7 @@ EditText mEditText, mContentText;
      }else{
          checksolved=getString(R.string.crime_report_unsolved);
      }
+
+     return null;
  }
 }
