@@ -3,7 +3,10 @@ package com.example.khaled.Note;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -29,6 +32,7 @@ import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +51,7 @@ EditText mEditText, mContentText;
     CheckBox mCheckBox;
     private Crime mCrime;
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_CONTACT =1;
     Date mDate;
     private static final String ARG_CRIME_ID = "crime_id";
 
@@ -142,9 +147,14 @@ EditText mEditText, mContentText;
         mToolbar.inflateMenu(R.menu.menu_note_content);
 
         ChooseContactbtn=(Button)v.findViewById(R.id.choosecontactbtnID);
+        ChooseContactbtn.setText(mCrime.getContactnumber());
+        final Intent intentcontact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         ChooseContactbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                startActivityForResult(intentcontact , REQUEST_CONTACT);
+
 
             }
         });
@@ -241,8 +251,30 @@ EditText mEditText, mContentText;
             Date date =(Date)data
                     .getSerializableExtra(DialogPickerFragment.DATE_KEY_BACK);
             mCrime.setDate(date);
+            DateUpdate();
+        }else if (requestCode == REQUEST_CONTACT && data!=null){
+            Uri contactUri = data.getData();
+            String[] query = new String[]{
+                    ContactsContract.Contacts.DISPLAY_NAME
+            };
+
+            Cursor c = getActivity().getContentResolver().query(contactUri, query,null,null,null);
+
+            try {
+                if (c.getCount()==0){
+                    return;
+                }
+
+                c.moveToFirst();
+                String contact = c.getString(0);
+                mCrime.setContactnumber(contact);
+                ChooseContactbtn.setText(contact);
+            }finally {
+                c.close();
+            }
+
         }
-        DateUpdate();
+
 
     }
 
@@ -284,6 +316,13 @@ EditText mEditText, mContentText;
         if (id== R.id.sharenotefragmentID){
             Toast.makeText(getActivity(), "viewpager", Toast.LENGTH_SHORT).show();
             Log.d(ViewPagerActivity.TAG,"share pressed");
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT , getNoteContent());
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
+            intent = Intent.createChooser( intent , getString(R.string.send_report));
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -298,6 +337,18 @@ EditText mEditText, mContentText;
          checksolved=getString(R.string.crime_report_unsolved);
      }
 
-     return null;
+     String dateFormat = "EEE, MMM dd - yyyy";
+     String dateString = (String) android.text.format.DateFormat.format( dateFormat,mCrime.getDate());
+
+     String Contactnumber= mCrime.getContactnumber();
+     if (Contactnumber == null){
+         Contactnumber= getString(R.string.crime_report_no_suspect);
+     }else {
+         Contactnumber = getString(R.string.crime_report_suspect , Contactnumber);
+     }
+
+     String sharecontent = getString(R.string.share_note, mCrime.getTitle(), mCrime.getContent(), dateString ,checksolved, Contactnumber);
+
+     return sharecontent;
  }
 }

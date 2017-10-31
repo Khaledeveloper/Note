@@ -23,12 +23,12 @@
     <string name="about_navi">about</string>
     <string name="choose_contact">Choose contact</string>
     <string name="share">share</string>
-    <string name="share_note">%1$s! +"/n "+ %2$s +"/n "+ %3$s + "/n" + %4$s</string>
-    <string name="crime_report_solved">The case is solved</string>
-    <string name="crime_report_unsolved">The case is not solved</string>
-    <string name="crime_report_no_suspect">there is no suspect.</string>
+    <string name="share_note">%1$s "\n " %2$s "\n " %3$s  "\n"  %4$s  "\n" %5$s</string>
+    <string name="crime_report_solved"> </string>
+    <string name="crime_report_unsolved"> </string>
+    <string name="crime_report_no_suspect"> </string>
     <string name="crime_report_suspect">the suspect is %s.</string>
-    <string name="crime_report_subject">CriminalIntent Crime Report</string>
-    <string name="send_report">Send crime report via</string>
+    <string name="crime_report_subject">My Note</string>
+    <string name="send_report">Share Note Via</string>
 
 </resources>

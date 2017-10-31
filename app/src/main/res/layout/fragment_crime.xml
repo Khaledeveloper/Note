@@ -5,16 +5,31 @@
              android:layout_height="match_parent"
 
               android:orientation="vertical"
+              android:background="@color/white"
              tools:context="com.example.khaled.Note.CrimeFragment"
     >
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ToolbarnorecontentID"
-        android:background="@color/colorPrimary"
-        >
 
-    </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/ToolbarnorecontentID"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:background="@color/colorAccent"
+
+            >
+
+
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
 
 
 
@@ -29,7 +44,7 @@
         android:layout_width="match_parent"
        android:layout_height="wrap_content"
         android:id="@+id/CardViewEdittextTitle"
-        android:elevation="5dp"
+
         android:foreground="?android:attr/selectableItemBackground"
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/white"
@@ -38,46 +53,15 @@
         >
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:id="@+id/EditTextFragmentID"
         android:background="@color/white"
+        android:padding="1dp"
         android:textStyle="bold"
         android:hint="@string/Enter_Title"/>
 
 </android.support.v7.widget.CardView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
 
-        <Button
-            android:id="@+id/crime_dateBtnID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="@color/white"
-
-            />
-        <Button
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-
-            android:text="@string/choose_contact"
-            android:id="@+id/choosecontactbtnID"
-            />
-
-
-        <CheckBox
-            android:id="@+id/crime_solvedCheckID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:text="@string/crime_solved_label"/>
-
-    </LinearLayout>
 
    <!-- <TextView
         android:layout_width="match_parent"
@@ -108,13 +92,13 @@
             >
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="400dp">
     <EditText
         android:id="@+id/NoteContentID"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
-
+        android:padding="1dp"
         android:hint="@string/NoteHint"
         />
 
@@ -124,7 +108,39 @@
     </ScrollView>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
+                <Button
+                    android:id="@+id/crime_dateBtnID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@color/white"
+
+                    />
+                <Button
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+
+                    android:text="@string/choose_contact"
+                    android:id="@+id/choosecontactbtnID"
+                    />
+
+
+                <CheckBox
+                    android:id="@+id/crime_solvedCheckID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/crime_solved_label"/>
+
+            </LinearLayout>
 
 
 
