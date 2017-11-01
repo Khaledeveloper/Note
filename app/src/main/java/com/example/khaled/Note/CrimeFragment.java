@@ -3,6 +3,7 @@ package com.example.khaled.Note;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -146,8 +147,12 @@ EditText mEditText, mContentText;
         mToolbar.setTitle("Khaled");
         mToolbar.inflateMenu(R.menu.menu_note_content);
 
+
+
         ChooseContactbtn=(Button)v.findViewById(R.id.choosecontactbtnID);
-        ChooseContactbtn.setText(mCrime.getContactnumber());
+        if (mCrime.getContactnumber()!=null) {
+            ChooseContactbtn.setText(mCrime.getContactnumber());
+        }
         final Intent intentcontact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
         ChooseContactbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,6 +163,11 @@ EditText mEditText, mContentText;
 
             }
         });
+
+        PackageManager packageManager = getActivity().getPackageManager();
+        if (packageManager.resolveActivity(intentcontact ,PackageManager.MATCH_DEFAULT_ONLY)==null){
+            ChooseContactbtn.setEnabled(false);
+        }
 
 
 
