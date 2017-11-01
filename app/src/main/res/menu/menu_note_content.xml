@@ -8,5 +8,11 @@
           android:icon="@drawable/ic_action_name"
           app:showAsAction="always"/>
 
+    <item android:id="@+id/cameratoolbarID"
+          android:title="@string/camera"
+          android:icon="@drawable/ic_camera"
+          app:showAsAction="always"/>
+"
+
 
 </menu>

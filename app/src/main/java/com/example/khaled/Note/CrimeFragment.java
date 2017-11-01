@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.khaled.Note.activities.ViewPagerActivity;
@@ -33,6 +35,7 @@ import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
+import java.io.File;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,9 +53,13 @@ EditText mEditText, mContentText;
     public Toolbar mToolbar;
     Button mDateButtn ,ChooseContactbtn;
     CheckBox mCheckBox;
+    private ImageView IMGview;
+    private  boolean canTakePic;
     private Crime mCrime;
+    private File mPicFile;
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT =1;
+    private static final int REQUEST_PIC =2;
     Date mDate;
     private static final String ARG_CRIME_ID = "crime_id";
 
@@ -102,6 +109,8 @@ EditText mEditText, mContentText;
                 .getSerializableExtra(MainActivity.Crime_ID_KEY);*/
        UUID CrimeID =(UUID)getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(CrimeID);
+        //requere premission
+        mPicFile= CrimeLab.get(getActivity()).getPhotoFile(mCrime);
     }
 
 
@@ -147,6 +156,10 @@ EditText mEditText, mContentText;
         mToolbar.setTitle("Khaled");
         mToolbar.inflateMenu(R.menu.menu_note_content);
 
+        IMGview =(ImageView)v.findViewById(R.id.IMGviewID);
+        IMGview.setVisibility(View.GONE);
+
+
 
 
         ChooseContactbtn=(Button)v.findViewById(R.id.choosecontactbtnID);
@@ -168,6 +181,11 @@ EditText mEditText, mContentText;
         if (packageManager.resolveActivity(intentcontact ,PackageManager.MATCH_DEFAULT_ONLY)==null){
             ChooseContactbtn.setEnabled(false);
         }
+
+        final Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        canTakePic = mPicFile!= null && cameraintent.resolveActivity(packageManager)!=null;
+
 
 
 
@@ -316,7 +334,11 @@ EditText mEditText, mContentText;
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_note_content, menu);
+
+        MenuItem camerabtn = (MenuItem) menu.findItem(R.id.IMGviewID);
+        //menu.findItem(R.id.cameratoolbarID).setEnabled(!camerabtn);
         super.onCreateOptionsMenu(menu, inflater);
+
     }
 
     @Override
@@ -333,6 +355,11 @@ EditText mEditText, mContentText;
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
             intent = Intent.createChooser( intent , getString(R.string.send_report));
             startActivity(intent);
+        }
+
+        if (id== R.id.cameratoolbarID){
+            Toast.makeText(getActivity(), "camera", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);
