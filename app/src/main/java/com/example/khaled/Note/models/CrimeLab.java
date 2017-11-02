@@ -174,6 +174,8 @@ public class CrimeLab {
 
         return new CrimeCursorWrapper(cursor);
     }
+
+    //checking
     //check if there is external storage
     public File getPhotoFile( Crime crime){
         File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
