@@ -56,10 +56,13 @@ EditText mEditText, mContentText;
     private ImageView IMGview;
     private  boolean canTakePic;
     private Crime mCrime;
+    private Button TakepicBtn;
     private File mPicFile;
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT =1;
     private static final int REQUEST_PIC =2;
+
+
     Date mDate;
     private static final String ARG_CRIME_ID = "crime_id";
 
@@ -155,6 +158,9 @@ EditText mEditText, mContentText;
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
         mToolbar.setTitle("Khaled");
         mToolbar.inflateMenu(R.menu.menu_note_content);
+        TakepicBtn =(Button)v.findViewById(R.id.takepicbtnID);
+
+
 
         IMGview =(ImageView)v.findViewById(R.id.IMGviewID);
         IMGview.setVisibility(View.GONE);
@@ -186,7 +192,18 @@ EditText mEditText, mContentText;
 
         canTakePic = mPicFile!= null && cameraintent.resolveActivity(packageManager)!=null;
 
+   TakepicBtn.setEnabled(canTakePic);
+        if (canTakePic){
+            Uri uri = Uri.fromFile(mPicFile);
+            cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+        }
 
+        TakepicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(cameraintent, REQUEST_PIC);
+            }
+        });
 
 
 
@@ -341,6 +358,8 @@ EditText mEditText, mContentText;
 
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -358,6 +377,9 @@ EditText mEditText, mContentText;
         }
 
         if (id== R.id.cameratoolbarID){
+
+
+
             Toast.makeText(getActivity(), "camera", Toast.LENGTH_SHORT).show();
 
         }
