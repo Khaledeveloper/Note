@@ -15,7 +15,7 @@ public class PicUtils {
         Point size = new Point();
         activity.getWindowManager().getDefaultDisplay().getSize(size);
 
-        return null;
+        return getScaledPic(path,size.x, size.y);
     }
 
     public static Bitmap getScaledPic( String path , int destWidth , int destHeight){
@@ -36,9 +36,12 @@ public class PicUtils {
             }
         }
 
+        options = new BitmapFactory.Options();
+        options.inSampleSize = inSampleSize;
 
 
-        return null;
+
+        return BitmapFactory.decodeFile(path, options);
 
     }
 }
