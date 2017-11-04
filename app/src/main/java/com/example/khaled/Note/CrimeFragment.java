@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -34,6 +35,7 @@ import com.example.khaled.Note.activities.ViewPagerActivity;
 import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
+import com.example.khaled.Note.utils.PicUtils;
 
 import java.io.File;
 import java.net.URL;
@@ -281,6 +283,8 @@ EditText mEditText, mContentText;
             }
         });
 
+        PicUpdate();
+
 
         return v;
     }
@@ -318,6 +322,8 @@ EditText mEditText, mContentText;
                 c.close();
             }
 
+        }else if (requestCode ==REQUEST_PIC){
+            PicUpdate();
         }
 
 
@@ -410,4 +416,31 @@ EditText mEditText, mContentText;
 
      return sharecontent;
  }
+
+ /*
+
+
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
+  */
+
+ public void PicUpdate(){
+     if (mPicFile==null|| !mPicFile.exists()){
+         IMGview.setImageDrawable(null);
+     }else {
+         Bitmap bitmap = PicUtils.getScaledPic(mPicFile.getPath(), getActivity());
+         IMGview.setVisibility(View.VISIBLE);
+         IMGview.setImageBitmap(bitmap);
+     }
+ }
+
+
+
+
 }

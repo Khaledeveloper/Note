@@ -70,6 +70,11 @@
         android:text="@string/crime_details_label"
         style="?android:listSeparatorTextViewStyle"/>-->
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -98,8 +103,8 @@
                 android:id="@+id/takepicbtnID"
                 />
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
                 android:id="@+id/IMGviewID"
                 android:scaleType="centerInside"
                 android:cropToPadding="true"/>
@@ -161,6 +166,7 @@
 
 
     </android.support.v7.widget.CardView>
+</ScrollView>
 
 
 
