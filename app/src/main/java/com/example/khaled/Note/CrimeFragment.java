@@ -285,7 +285,7 @@ EditText mEditText, mContentText;
         return v;
     }
 
-
+//////////////OnAvtivityResult*************************************
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
