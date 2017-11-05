@@ -97,12 +97,23 @@
                 android:text="take pic"
                 android:id="@+id/takepicbtnID"
                 />
+
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:id="@+id/IMGviewID"
                 android:scaleType="centerInside"
                 android:cropToPadding="true"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/IMGviewGalleryID"
+
+
+                />
+
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="400dp">

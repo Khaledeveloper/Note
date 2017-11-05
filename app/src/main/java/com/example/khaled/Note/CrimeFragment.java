@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -38,6 +40,8 @@ import com.example.khaled.Note.models.CrimeLab;
 import com.example.khaled.Note.utils.PicUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,18 +55,21 @@ import java.util.UUID;
  */
 public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionMenuPager*/ {
 
-EditText mEditText, mContentText;
+
+    EditText mEditText, mContentText;
     public Toolbar mToolbar;
     Button mDateButtn ,ChooseContactbtn;
     CheckBox mCheckBox;
-    private ImageView IMGview;
+    private ImageView IMGview, IMGviewGallery;
     private  boolean canTakePic;
     private Crime mCrime;
     private Button TakepicBtn;
-    private File mPicFile;
+    private File mPicFile, mPicGalleryFile;
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT =1;
     private static final int REQUEST_PIC =2;
+    public static final int REQUEST_PICGALLERY = 3;
+    Intent IntentPickPicFromGallery;
 
 
     Date mDate;
@@ -166,6 +173,10 @@ EditText mEditText, mContentText;
 
         IMGview =(ImageView)v.findViewById(R.id.IMGviewID);
         IMGview.setVisibility(View.GONE);
+
+        IMGviewGallery =(ImageView)v.findViewById(R.id.IMGviewGalleryID);
+        IMGviewGallery.setVisibility(View.GONE);
+
 
 
 
@@ -322,6 +333,22 @@ EditText mEditText, mContentText;
 
         }else if (requestCode ==REQUEST_PIC){
             PicUpdate();
+        }else if (requestCode ==REQUEST_PICGALLERY){
+            Uri uriData = data.getData();
+            InputStream inputStream;
+
+
+
+            try {
+                inputStream = getActivity().getContentResolver().openInputStream(uriData);
+                Bitmap bitmapImageFromGallery = BitmapFactory.decodeStream(inputStream);
+                IMGviewGallery.setImageBitmap(bitmapImageFromGallery);
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -381,6 +408,24 @@ EditText mEditText, mContentText;
         }
 
         if (id== R.id.cameratoolbarID){
+            IntentPickPicFromGallery = new Intent(Intent.ACTION_PICK);
+
+            //file to find the pic
+            mPicGalleryFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            //the string text of path
+            String mPickGalleryFilePath = mPicGalleryFile.getPath();
+            //get the uri of it
+            Uri uri = Uri.parse(mPickGalleryFilePath);
+
+            //the type to set all image type *
+
+            IntentPickPicFromGallery.setDataAndType(uri,"image/*");
+
+            //start activity
+
+            startActivityForResult(IntentPickPicFromGallery,REQUEST_PICGALLERY);
+
+
 
 
 
