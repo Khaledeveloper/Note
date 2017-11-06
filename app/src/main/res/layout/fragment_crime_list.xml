@@ -16,6 +16,7 @@
         android:layout_width="240dp"
         android:layout_height="match_parent"
         app:menu="@menu/navigation_main_menu"
+        app:headerLayout="@layout/navi_header_main"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:id="@+id/NavigationMainID"

@@ -32,5 +32,8 @@
     <string name="send_report">Share Note Via</string>
     <string name="camera">camera_toolbar</string>
     <string name="Gallery">Gallery</string>
+    <string name="more_apps">More Apps</string>
+    <string name="new_note">New Note</string>
+    <string name="Camera">Camera</string>
 
 </resources>
