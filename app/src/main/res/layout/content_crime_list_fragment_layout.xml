@@ -34,6 +34,7 @@
         android:src="@drawable/ic_floating_add"
 
         android:layout_margin="12dp"
+        app:backgroundTint="@color/browndark"
 
 
         android:layout_gravity="bottom|right"

@@ -4,7 +4,7 @@
                  android:orientation="vertical"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-    android:background="@color/white">
+    android:background="@color/lightbrown">
 
 
 
@@ -17,10 +17,10 @@
         android:foreground="?android:attr/selectableItemBackground"
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/white"
+        android:padding="5dp"
 
-        android:layout_margin="10dp"
-
-        >
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -39,8 +39,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/CrimeTitle_listID"
                 android:padding="4dp"
-                android:textSize="18dp"
+                android:textSize="18sp"
+
                 android:textStyle="bold"
+
                 android:layout_toLeftOf="@id/CheckBox_list_ctimeID"
                 />
             <TextView
@@ -48,6 +50,7 @@
                 android:layout_height="50dp"
                 android:id="@+id/NoteContentRowID"
                 android:padding="4dp"
+
 
                 android:layout_below="@id/CrimeTitle_listID"
                 />
@@ -59,6 +62,7 @@
                 android:id="@+id/CrimeDate_listID"
                 android:layout_below="@id/NoteContentRowID"
                 android:padding="10dp"
+                android:textSize="12sp"
 
 
                 />

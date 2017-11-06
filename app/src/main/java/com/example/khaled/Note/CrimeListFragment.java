@@ -183,6 +183,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
             private Crime mCrime;
             CardView mCardView;
 
+
             public Crimeholder(View itemView/*, CrimeListActivity crimeListActivity*/) {
                 super(itemView);
 
@@ -316,6 +317,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
 
             holder.checkdelete.setVisibility(View.GONE);
+            holder.mCheckBoxList.setVisibility(View.GONE);
 
 
 

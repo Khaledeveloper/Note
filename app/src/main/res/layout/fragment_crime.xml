@@ -15,10 +15,10 @@
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="57dp"
             android:id="@+id/ToolbarnorecontentID"
             app:layout_scrollFlags="scroll|enterAlways"
-            android:background="@color/colorAccent"
+            android:background="@color/white"
 
             >
 
@@ -33,7 +33,7 @@
 
 
 
-    <!-- TODO: Update blank fragment layout -->
+
 
     <!--<TextView
         android:layout_width="match_parent"
@@ -49,19 +49,10 @@
         app:cardUseCompatPadding="true"
         app:cardBackgroundColor="@color/white"
         android:layout_margin="10dp"
-        android:layout_weight="1"
+        android:layout_weight="5"
         >
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:id="@+id/EditTextFragmentID"
-        android:background="@color/white"
-        android:padding="1dp"
-        android:textStyle="bold"
-        android:hint="@string/Enter_Title"/>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 
 
    <!-- <TextView
@@ -70,9 +61,13 @@
         android:text="@string/crime_details_label"
         style="?android:listSeparatorTextViewStyle"/>-->
 
+
+
+
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
 
 
@@ -96,18 +91,39 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
+
+            <EditText
+                android:id="@+id/EditTextFragmentID"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/white"
+                android:hint="@string/Enter_Title"
+                android:padding="1dp"
+                android:textStyle="bold"/>
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="take pic"
                 android:id="@+id/takepicbtnID"
                 />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:id="@+id/IMGviewID"
                 android:scaleType="centerInside"
                 android:cropToPadding="true"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:id="@+id/IMGviewGalleryID"
+
+
+                />
+
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="400dp">
@@ -166,9 +182,9 @@
 
 
     </android.support.v7.widget.CardView>
+
+
 </ScrollView>
-
-
 
 
 

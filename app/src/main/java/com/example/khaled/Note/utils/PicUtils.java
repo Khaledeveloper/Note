@@ -26,7 +26,9 @@ public class PicUtils {
         float srcWidth = options.outWidth;
         float srcHeight = options.outHeight;
 
-        int inSampleSize = 0;
+
+        int inSampleSize = 1;
+
 
         if (srcHeight> destHeight || srcWidth  >destWidth){
             if (srcWidth> srcHeight){

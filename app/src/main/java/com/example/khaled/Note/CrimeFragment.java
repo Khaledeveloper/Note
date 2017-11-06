@@ -6,8 +6,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+
+import android.graphics.BitmapFactory;
+
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -38,6 +43,8 @@ import com.example.khaled.Note.models.CrimeLab;
 import com.example.khaled.Note.utils.PicUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,18 +58,27 @@ import java.util.UUID;
  */
 public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionMenuPager*/ {
 
-EditText mEditText, mContentText;
+
+    EditText mEditText, mContentText;
     public Toolbar mToolbar;
     Button mDateButtn ,ChooseContactbtn;
     CheckBox mCheckBox;
-    private ImageView IMGview;
+    private ImageView IMGview, IMGviewGallery;
     private  boolean canTakePic;
     private Crime mCrime;
     private Button TakepicBtn;
-    private File mPicFile;
+    private File mPicFile, mPicGalleryFile;
+    public static final String TAG ="crimeFragment";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT =1;
     private static final int REQUEST_PIC =2;
+    public static final int REQUEST_PICGALLERY = 3;
+
+    Intent IntentPickPicFromGallery;
+    Uri uriDataGallery;
+    InputStream inputStreamGallery;
+    Intent cameraintent;
+   // Intent mDataGallery;
 
 
     Date mDate;
@@ -158,14 +174,36 @@ EditText mEditText, mContentText;
 
   mToolbar =(Toolbar)v.findViewById(R.id.ToolbarnorecontentID);
         ((AppCompatActivity)getActivity()).setSupportActionBar(mToolbar);
-        mToolbar.setTitle("Khaled");
+       // mToolbar.setTitle("Khaled");
         mToolbar.inflateMenu(R.menu.menu_note_content);
+        /*if (((AppCompatActivity)getActivity()).getSupportActionBar()!=null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        }*/
+
+        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getActivity().onBackPressed();
+
+
+
+            }
+        });
         TakepicBtn =(Button)v.findViewById(R.id.takepicbtnID);
+       TakepicBtn.setVisibility(View.GONE);
 
 
 
         IMGview =(ImageView)v.findViewById(R.id.IMGviewID);
         IMGview.setVisibility(View.GONE);
+
+        IMGviewGallery =(ImageView)v.findViewById(R.id.IMGviewGalleryID);
+        IMGviewGallery.setVisibility(View.GONE);
+
 
 
 
@@ -190,7 +228,9 @@ EditText mEditText, mContentText;
             ChooseContactbtn.setEnabled(false);
         }
 
-        final Intent cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+         cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
 
         canTakePic = mPicFile!= null && cameraintent.resolveActivity(packageManager)!=null;
 
@@ -284,6 +324,7 @@ EditText mEditText, mContentText;
         });
 
         PicUpdate();
+       // PicGalleryUpdate(mDataGallery);
 
 
         return v;
@@ -324,6 +365,31 @@ EditText mEditText, mContentText;
 
         }else if (requestCode ==REQUEST_PIC){
             PicUpdate();
+
+        }else if (requestCode ==REQUEST_PICGALLERY){
+         /*   Uri uriDataGallery = data.getData();
+            InputStream inputStreamGallery;*/
+
+
+           PicGalleryUpdate(data);
+
+
+
+
+         /*  try {
+                inputStreamGallery = getActivity().getContentResolver().openInputStream(uriDataGallery);
+                Bitmap bitmapImageFromGallery = BitmapFactory.decodeStream(inputStreamGallery);
+
+                IMGviewGallery.setImageBitmap(bitmapImageFromGallery);
+              IMGviewGallery.setVisibility(View.VISIBLE);
+
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }*/
+
         }
 
 
@@ -370,6 +436,26 @@ EditText mEditText, mContentText;
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+      if (id==R.id.GalleryImgID){
+          IntentPickPicFromGallery = new Intent(Intent.ACTION_PICK);
+
+          //file to find the pic
+          mPicGalleryFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+          //the string text of path
+          String mPickGalleryFilePath = mPicGalleryFile.getPath();
+          //get the uri of it
+          Uri uri = Uri.parse(mPickGalleryFilePath);
+
+          //the type to set all image type *
+
+          IntentPickPicFromGallery.setDataAndType(uri,"image/*");
+
+          //start activity
+
+          startActivityForResult(IntentPickPicFromGallery,REQUEST_PICGALLERY);
+
+
+      }
         if (id== R.id.sharenotefragmentID){
             Toast.makeText(getActivity(), "viewpager", Toast.LENGTH_SHORT).show();
             Log.d(ViewPagerActivity.TAG,"share pressed");
@@ -383,10 +469,15 @@ EditText mEditText, mContentText;
         }
 
         if (id== R.id.cameratoolbarID){
+            cameraintent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Uri uri = Uri.fromFile(mPicFile);
+            cameraintent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+
+            startActivityForResult(cameraintent, REQUEST_PIC);
 
 
 
-            Toast.makeText(getActivity(), "camera", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -438,9 +529,32 @@ EditText mEditText, mContentText;
          IMGview.setVisibility(View.VISIBLE);
          IMGview.setImageBitmap(bitmap);
      }
+
+
  }
 
+public void PicGalleryUpdate(Intent data) {
+        if (mPicGalleryFile==null || !mPicGalleryFile.exists()){
+            IMGviewGallery.setImageDrawable(null);
+        }else {
+            uriDataGallery = data.getData();
+            try {
+                inputStreamGallery = getActivity().getContentResolver().openInputStream(uriDataGallery);
+                Bitmap bitmapImageFromGallery = BitmapFactory.decodeStream(inputStreamGallery);
 
+                IMGviewGallery.setImageBitmap(bitmapImageFromGallery);
+                Log.d(TAG,"PicGalleryUpdate");
+
+
+
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            IMGviewGallery.setVisibility(View.VISIBLE);
+        }
+    }
 
 
 }
