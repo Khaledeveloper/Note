@@ -3,6 +3,7 @@ package com.example.khaled.Note;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,20 +14,24 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.khaled.Note.activities.ViewPagerActivity;
 import com.example.khaled.Note.interfaces.InterfaceOnLongClick;
+import com.example.khaled.Note.interfaces.InterfacePopupMenuMainRecycler;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 
@@ -40,13 +45,15 @@ import java.util.TimeZone;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeListFragment extends Fragment implements InterfaceOnLongClick {
+public class CrimeListFragment extends Fragment implements InterfaceOnLongClick,InterfacePopupMenuMainRecycler {
+    public static final String TAG = "TAG";
     CrimeAdapter mAdapter;
     Toolbar mToolbar;
     FloatingActionButton mFAB;
     private DrawerLayout mDrawerLayout;
     //private ActionBarDrawerToggle mActionBarDrawerToggle;
     static boolean isSelected = false;
+    List<Crime> crimes;
     ArrayList<Crime> SelectedItems = new ArrayList<>();
 
     @Override
@@ -123,9 +130,9 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
     private void RecyclerUpdate(){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
-        List<Crime> crimes = crimeLab.getCrimes();
+         crimes = crimeLab.getCrimes();
         if (mAdapter == null) {
-            mAdapter = new CrimeAdapter(crimes,this);
+            mAdapter = new CrimeAdapter(crimes,this, this,getActivity());
             mRecyclerView.setAdapter(mAdapter);
         }else {
             mAdapter.setCrimes(crimes);
@@ -144,8 +151,15 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
     }
 
-
-
+    @Override
+    public void onClickPopUpMenuMainRecycler(MenuItem item, Context context, int Position) {
+        Crime crime = crimes.get(Position);
+        int id = item.getItemId();
+        if (id == R.id.deletemenudotsmainID){
+            Toast.makeText(getActivity(), "interface delete!" +crime.getId().toString()+ Position , Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"menu interface done!!!............................"+crime.getId().toString()+ Position);
+        }
+    }
 
 
     //***********************************************************************
@@ -158,14 +172,17 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
         private List<Crime> mCrimes;
         Context mContext;
         InterfaceOnLongClick mInterfaceOnLongClick;
+        InterfacePopupMenuMainRecycler mInterfacePopupMenuMainRecycler;
        // CrimeListActivity mCrimeListActivity;
      //   CrimeListFragment mCrimeListFragment;
 
 
-        public CrimeAdapter(List<Crime> crimes,InterfaceOnLongClick interfaceOnlong) {
+        public CrimeAdapter(List<Crime> crimes,InterfaceOnLongClick interfaceOnlong,InterfacePopupMenuMainRecycler interfacePopupMenuMainRecycler, Context context) {
            // this.mContext = ctx;
             mCrimes = crimes;
             this.mInterfaceOnLongClick = interfaceOnlong;
+            this.mInterfacePopupMenuMainRecycler = interfacePopupMenuMainRecycler;
+            this.mContext = context;
 
         //   this.mCrimeListActivity =(CrimeListActivity) mContext;
 
@@ -181,6 +198,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
             private TextView mContentNote;
             public CheckBox mCheckBoxList,checkdelete;
             private Crime mCrime;
+            private Button menudots;
             CardView mCardView;
 
 
@@ -205,6 +223,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
                 mContentNote=(TextView) itemView.findViewById(R.id.NoteContentRowID);
                 checkdelete=(CheckBox)itemView.findViewById(R.id.checkTodeleteID);
                 mCardView=(CardView)itemView.findViewById(R.id.cardviewRow);
+                menudots=(Button)itemView.findViewById(R.id.menudotsmainID);
 
                 //   mCardView.setOnLongClickListener(this);
 
@@ -277,6 +296,8 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
 
 
+
+
             @Override
             public boolean onLongClick(View v) {
                 if (mInterfaceOnLongClick!=null) {
@@ -302,7 +323,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
         }
 
         @Override
-        public void onBindViewHolder(Crimeholder holder, int position) {
+        public void onBindViewHolder(final Crimeholder holder, final int position) {
 
             Crime crime = mCrimes.get(position);
             holder.Bindcrime(crime);
@@ -318,6 +339,27 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
             holder.checkdelete.setVisibility(View.GONE);
             holder.mCheckBoxList.setVisibility(View.GONE);
+
+            holder.menudots.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(mContext,holder.menudots);
+                    popupMenu.inflate(R.menu.menudotsmain);
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            mInterfacePopupMenuMainRecycler.onClickPopUpMenuMainRecycler(item, mContext , position);
+                            int id = item.getItemId();
+
+
+
+                            return false;
+                        }
+                    });
+
+                    popupMenu.show();
+                }
+            });
 
 
 

@@ -167,7 +167,7 @@ public class CrimeLab {
                 whereArgs,
                 null,  //groupBy
                 null, //having
-                null //orderBy
+                CrimeTable.Cols.DATE+" DESC" //orderBy
         );
 
 

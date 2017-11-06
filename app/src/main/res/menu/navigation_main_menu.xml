@@ -24,9 +24,9 @@
                 android:title="@string/Camera"
                 android:icon="@drawable/ic_photo_camera_black_24dp"/>
 
-            <item android:id="GalleryMainID"
+            <item android:id="@+id/GalleryMainID"
                 android:title="@string/Gallery"
-                android:icon="@drawable/ic_image_black_24dp"
+                android:icon="@drawable/ic_image_black_24dp"/>
 
 
 

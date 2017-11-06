@@ -35,5 +35,6 @@
     <string name="more_apps">More Apps</string>
     <string name="new_note">New Note</string>
     <string name="Camera">Camera</string>
+    <string name="delete">delete</string>
 
 </resources>
