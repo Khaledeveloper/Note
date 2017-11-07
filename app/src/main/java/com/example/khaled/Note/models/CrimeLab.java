@@ -152,7 +152,18 @@ public class CrimeLab {
 
         ContentValues contentValues = getContentValues(crime);
 
-        mSQLiteDatabase.update(CrimeTable.NAME,contentValues,CrimeTable.Cols.UUID +"= ?",new String[] {uuidString});
+        mSQLiteDatabase.update(CrimeTable.NAME ,contentValues,CrimeTable.Cols.UUID +"= ?",new String[] {uuidString});
+
+    }
+
+
+    public void deleteNote(Crime crime){
+
+        String uuidString = crime.getId().toString();
+
+        ContentValues contentValues =getContentValues(crime);
+
+        mSQLiteDatabase.delete(CrimeTable.NAME,CrimeTable.Cols.UUID+"= ?" , new String[] {uuidString});
 
     }
 

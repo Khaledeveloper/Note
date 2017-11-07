@@ -156,6 +156,12 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
         Crime crime = crimes.get(Position);
         int id = item.getItemId();
         if (id == R.id.deletemenudotsmainID){
+            CrimeLab.get(getActivity()).deleteNote(crime);
+            RecyclerUpdate();
+           /* mAdapter = new CrimeAdapter(crimes,this, this,getActivity());
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.setCrimes(crimes);
+            mAdapter.notifyDataSetChanged();*/
             Toast.makeText(getActivity(), "interface delete!" +crime.getId().toString()+ Position , Toast.LENGTH_SHORT).show();
             Log.d(TAG,"menu interface done!!!............................"+crime.getId().toString()+ Position);
         }
