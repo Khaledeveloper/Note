@@ -223,6 +223,7 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
             }
         });
 
+
         PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.resolveActivity(intentcontact ,PackageManager.MATCH_DEFAULT_ONLY)==null){
             ChooseContactbtn.setEnabled(false);
@@ -325,6 +326,11 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
 
         PicUpdate();
        // PicGalleryUpdate(mDataGallery);
+
+
+        mDateButtn.setVisibility(View.GONE);
+        ChooseContactbtn.setVisibility(View.GONE);
+        mCheckBox.setVisibility(View.GONE);
 
 
         return v;
