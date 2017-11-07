@@ -193,14 +193,14 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
         ArrayList<Crime>newList = new ArrayList<>();
         for (Crime crime : crimes){
             String name = crime.getTitle().toLowerCase();
-            String content = crime.getContent().toLowerCase();
+           // String content = crime.getContent();
 
-            if (name.contains(newText)|| content.contains(newText)){
+            if (name.contains(newText)){
                 newList.add(crime);
             }
             mAdapter.setFilter(newList);
         }
-        return false;
+        return true;
     }
 
 
