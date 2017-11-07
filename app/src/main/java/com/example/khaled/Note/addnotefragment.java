@@ -16,6 +16,7 @@ public class addnotefragment extends Fragment {
 
     public addnotefragment() {
         // Required empty public constructor
+
     }
 
 
