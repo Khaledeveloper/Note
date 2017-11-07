@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +47,7 @@ import java.util.TimeZone;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeListFragment extends Fragment implements InterfaceOnLongClick,InterfacePopupMenuMainRecycler {
+public class CrimeListFragment extends Fragment implements InterfaceOnLongClick,InterfacePopupMenuMainRecycler, SearchView.OnQueryTextListener {
     public static final String TAG = "TAG";
     CrimeAdapter mAdapter;
     Toolbar mToolbar;
@@ -162,9 +164,43 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setCrimes(crimes);
             mAdapter.notifyDataSetChanged();*/
-            Toast.makeText(getActivity(), "interface delete!" +crime.getId().toString()+ Position , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.Deleted , Toast.LENGTH_SHORT).show();
             Log.d(TAG,"menu interface done!!!............................"+crime.getId().toString()+ Position);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        /*
+         ArrayList<StoryModelM> newList = new ArrayList<>();
+        for (StoryModelM storyModel : mModel) {
+            String name = storyModel.getTitleModel();
+            if (name.contains(newText))
+                newList.add(storyModel);
+        }
+        adapter.setFilter(newList);
+
+        return true;
+
+         */
+
+        ArrayList<Crime>newList = new ArrayList<>();
+        for (Crime crime : crimes){
+            String name = crime.getTitle().toLowerCase();
+            String content = crime.getContent().toLowerCase();
+
+            if (name.contains(newText)|| content.contains(newText)){
+                newList.add(crime);
+            }
+            mAdapter.setFilter(newList);
+        }
+        return false;
     }
 
 
@@ -197,6 +233,12 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
         public void setOnlongClick(InterfaceOnLongClick interfaceOnLongClick){
             mInterfaceOnLongClick =interfaceOnLongClick;
+        }
+
+        public void setFilter(ArrayList<Crime> newList){
+            mCrimes = new ArrayList<>();
+            mCrimes.addAll(newList);
+            notifyDataSetChanged();
         }
 
         public class Crimeholder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
@@ -392,6 +434,10 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_list, menu);
+        MenuItem menuItem = menu.findItem(R.id.search_main_listID);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+
         super.onCreateOptionsMenu(menu, inflater);
     }
     public void AddNewCrime(){

@@ -3,16 +3,20 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
+    <item
+        android:id="@+id/search_main_listID"
+        android:title="@string/Search"
+        android:icon="@drawable/ic_search_white_18dp"
+        app:showAsAction="always|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+
 
     <item
         android:id="@+id/menu_item_new_crime"
         android:icon="@drawable/ic_note_add_white_24dp"
         android:title="@string/new_crime"
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/menu_item_show_subtitle"
-        android:title="@string/show_subtitle"
         app:showAsAction="ifRoom"/>
+
+
 
 </menu>
