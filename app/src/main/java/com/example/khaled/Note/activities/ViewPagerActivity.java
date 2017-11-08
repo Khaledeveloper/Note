@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.khaled.Note.CrimeFragment;
 
 import com.example.khaled.Note.R;
+import com.example.khaled.Note.interfaces.InterfaceOnBackPressed;
 import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
@@ -27,6 +28,7 @@ import java.util.UUID;
 
 public class ViewPagerActivity extends AppCompatActivity {
     ViewPager mViewPager;
+    public static InterfaceOnBackPressed interfaceBack;
     public static final String TAG ="ViewPagerToast";
     static InterfaceOnSelectOptionMenuPager mInterfaceOnSelectOption;
     private List<Crime> mCrime;
@@ -92,6 +94,17 @@ private static final String CRIMID_KEY ="com.example.khaled.crime.crimeIDViewPag
        mInterfaceOnSelectOption = interfaceOnSelectOption;
     }
 // mInterfaceOnSelectOption.onSelectOptionMenu(item ,ViewPagerActivity.this);
+public static void setOnBackPressed(InterfaceOnBackPressed interfaceback){
+    interfaceBack =interfaceback;
+}
 
+    @Override
+    public void onBackPressed() {
 
+        if (interfaceBack!=null) {
+
+            interfaceBack.InterfaceOnBackPressed();
+        }
+        super.onBackPressed();
+    }
 }

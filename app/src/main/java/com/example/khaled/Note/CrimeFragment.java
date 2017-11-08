@@ -10,14 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -36,8 +34,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.khaled.Note.activities.MainActivity;
 import com.example.khaled.Note.activities.ViewPagerActivity;
-import com.example.khaled.Note.interfaces.InterfaceOnSelectOptionMenuPager;
+import com.example.khaled.Note.interfaces.InterfaceOnBackPressed;
 import com.example.khaled.Note.models.Crime;
 import com.example.khaled.Note.models.CrimeLab;
 import com.example.khaled.Note.utils.PicUtils;
@@ -45,7 +44,6 @@ import com.example.khaled.Note.utils.PicUtils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,7 +54,7 @@ import java.util.UUID;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionMenuPager*/ {
+public class CrimeFragment extends Fragment implements InterfaceOnBackPressed /*implementsInterfaceOnSelectOptionMenuPager*/ {
 
 
     EditText mEditText, mContentText;
@@ -68,6 +66,7 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
     public  Crime mCrime;
     private Button TakepicBtn;
     private File mPicFile, mPicGalleryFile;
+
     public static final String TAG ="crimeFragment";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT =1;
@@ -103,6 +102,7 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // ViewPagerActivity.setoptionmenu(this);
+
 
         Log.d(ViewPagerActivity.TAG,"OnCreateFragment.........");
 
@@ -146,23 +146,7 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
         CrimeLab.get(getActivity()).updateCrime(mCrime);
     }
 
-    @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-        Log.d(ViewPagerActivity.TAG,"OnAttach.....");
-    }
 
-    @Override
-    public void onStart() {
-        Log.d(ViewPagerActivity.TAG,"onStart...........");
-        super.onStart();
-    }
-
-    @Override
-    public void onDestroy() {
-        deleteEmptyNote();
-        super.onDestroy();
-    }
 
     public  void deleteEmptyNote(){
         if (mCrime.getTitle()==null && mCrime.getContent()== null){
@@ -194,12 +178,13 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
 
         }*/
 
-        mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        mToolbar.setNavigationIcon(R.drawable.ic_done_black_24dp);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                getActivity().onBackPressed();
+                getActivity().finish();
+                deleteEmptyNote();
 
 
 
@@ -340,13 +325,60 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
        // PicGalleryUpdate(mDataGallery);
 
 
+
         mDateButtn.setVisibility(View.GONE);
         ChooseContactbtn.setVisibility(View.GONE);
         mCheckBox.setVisibility(View.GONE);
+        ViewPagerActivity.setOnBackPressed(this);
+
+
 
 
         return v;
+
+
+
     }
+
+   /* public void DeleteNote(){
+        String Title = mEditText.toString();
+        String Content = mContentText.toString();
+
+        if (Title.length()<1 && Content.length()<1){
+            CrimeLab.get(getActivity()).deleteNote(mCrime);
+        }else if ((Title.length()>0 || Content.length()>0)){
+            Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
+        }
+    }*/
+    @Override
+    public void onAttachFragment(Fragment childFragment) {
+        super.onAttachFragment(childFragment);
+        Log.d(ViewPagerActivity.TAG,"OnAttach.....");
+    }
+
+    @Override
+    public void onStart() {
+        Log.d(ViewPagerActivity.TAG,"onStart...........");
+        super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        deleteEmptyNote();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        deleteEmptyNote();
+
+        Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
+        super.onDetach();
+    }
+
+
+
 
 //////////////OnAvtivityResult*************************************
 
@@ -572,7 +604,29 @@ public void PicGalleryUpdate(Intent data) {
             }
             IMGviewGallery.setVisibility(View.VISIBLE);
         }
+
+
+
+
+
     }
 
 
+    @Override
+    public void InterfaceOnBackPressed() {
+        getActivity().finish();
+
+
+        getActivity().getSupportFragmentManager().popBackStack();
+
+
+
+        deleteEmptyNote();
+
+      Log.d(TAG,"###################################onBackPressed.......................................");
+
+
+
+
+    }
 }

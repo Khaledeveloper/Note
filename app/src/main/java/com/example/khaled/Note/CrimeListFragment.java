@@ -127,6 +127,7 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
     @Override
     public void onResume() {
         super.onResume();
+
         RecyclerUpdate();
     }
 
@@ -143,6 +144,9 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
 
 
+
+    }
+    public void onBackPressed(){
 
     }
 

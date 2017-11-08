@@ -4,12 +4,18 @@ package com.example.khaled.Note.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.khaled.Note.CrimeFragment;
+import com.example.khaled.Note.interfaces.InterfaceOnBackPressed;
 
 import java.util.UUID;
 
 public class MainActivity extends SingleFragmentActivity {
+
+    public static String TAGACTIVITY ="MainActivity";
+
     private static final String Crime_ID_KEY ="com.example.khaled.crime.crimeID";
 
 
@@ -28,4 +34,8 @@ public class MainActivity extends SingleFragmentActivity {
 
         return CrimeFragment.newInstance(crimeID);
     }
+
+
+
+
 }

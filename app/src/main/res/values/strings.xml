@@ -38,5 +38,6 @@
     <string name="delete">delete</string>
     <string name="Search">Search</string>
     <string name="Deleted">Deleted!</string>
+    <string name="saved">Saved!</string>
 
 </resources>
