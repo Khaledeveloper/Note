@@ -65,7 +65,7 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
     CheckBox mCheckBox;
     private ImageView IMGview, IMGviewGallery;
     private  boolean canTakePic;
-    private Crime mCrime;
+    public  Crime mCrime;
     private Button TakepicBtn;
     private File mPicFile, mPicGalleryFile;
     public static final String TAG ="crimeFragment";
@@ -156,6 +156,18 @@ public class CrimeFragment extends Fragment /*implementsInterfaceOnSelectOptionM
     public void onStart() {
         Log.d(ViewPagerActivity.TAG,"onStart...........");
         super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        deleteEmptyNote();
+        super.onDestroy();
+    }
+
+    public  void deleteEmptyNote(){
+        if (mCrime.getTitle()==null && mCrime.getContent()== null){
+            CrimeLab.get(getActivity()).deleteNote(mCrime);
+        }
     }
 
     @Override

@@ -192,15 +192,21 @@ mRecyclerView =(RecyclerView)view.findViewById(R.id.mRecyclerviewID);
 
         ArrayList<Crime>newList = new ArrayList<>();
         for (Crime crime : crimes){
-            String name = crime.getTitle().toLowerCase();
-           // String content = crime.getContent();
+            String name =" ";
+            String content =" ";
+            if (crime.getTitle()!=null) {
+                 name = crime.getTitle().toLowerCase();
+            }
 
-            if (name.contains(newText)){
+            if (crime.getContent()!=null) {
+                 content = crime.getContent().toLowerCase();
+            }
+            if (name.contains(newText)|| content.contains(newText)){
                 newList.add(crime);
             }
             mAdapter.setFilter(newList);
         }
-        return true;
+        return false;
     }
 
 
